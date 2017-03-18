@@ -1,2 +1,3 @@
+# Black Red Bot
 
-#First Time
+Welcome to roulette Dafabet Autobot.
