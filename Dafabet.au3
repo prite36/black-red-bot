@@ -24,7 +24,7 @@ Global 	$filePath = @ScriptDir&"\LogFile\BetMoney.txt"
 While 1  ;หยุดรอการกด start
 	ToolTip('Start:[PGUP]_First Time:[INSERT]_Pause:[PAUSE]_EXIT:[PGDN] ', 19,0 )
     Sleep(4*60*1000)  ;รอ 4 นาที ถ้ายังไม่กด Bot จะเริ่มทำงาน
-	Send("{PGUP}")
+	Send("^{INSERT}")
 WEnd
 
 Func _Begin()
