@@ -9,6 +9,7 @@
 ;~ MsgBox($MB_OK, "Tutorial", "Hello World!")
 HotKeySet("{PGUP}","_Begin")
 HotKeySet("{INSERT}","_goToRoulette")
+HotKeySet("^{INSERT}","_fixB4Start")
 HotKeySet("{PAUSE}", "_Pause")
 HotKeySet("{PGDN}", "_Exit")
 
@@ -34,14 +35,20 @@ Func _Begin()
 
 EndFunc
 
+func _fixB4Start()
+	ToolTip('Fix Money = 10.1 ', 50,0 )
+	$Money = 10.1
+	goWriteFile()
+	_goToRoulette()
+EndFunc
+
 func _goToRoulette()
 	sleep(1000)
 	$dropMoney = Random(1,3,1)	;เริ่มแรกให้random ที่วางเงิน
 	ToolTip('Go to Roulette ', 50,0 )
-	click_picture("openTab")
-	sleep(300)
-	Send("imacros://run/?m=DafabetLogin.js")  ;เปิด imacro ผ่าน URL bar
-	send("{ENTER}")
+	WinActivate("[CLASS:MozillaWindowClass]","")   ;เปิดกน้าโปรแกรม Firefox ขึ้นมา
+	sleep(1000)
+	Run("""C:\Program Files\Mozilla Firefox\firefox.exe"" imacros://run/?m=DafabetLogin.js") ; run imacro
 	Local $hTimer = TimerInit()  ;เริ่มจับเวลา
 	While 1
 		if search_area("downBar") Then ExitLoop
@@ -51,7 +58,7 @@ func _goToRoulette()
 		sleep(1000)
 	WEnd
 	click_picture("downBar")
-	MouseClick("left",874, 508,1,2)  ;กดปุ่มเข้าสู่เกม
+	MouseClick("left",876, 501,1,2)  ;กดปุ่มเข้าสู่เกม
 	click_picture("menuRoulette")
 	click_picture("submitDefault")     ;กดปุ่มตกลงก่อนเริ่มเกม
 	Start()
