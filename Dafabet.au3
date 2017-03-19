@@ -121,6 +121,7 @@ Func Start()
 
 				If $profitNow >= $profitPerRound then
 
+					_FileWriteLog(@ScriptDir & "\LogFile\LogData.log", "Profit in day "&$profitNow&" Bath")
 					goWriteFile("TotalProfit")
 					$Money = 10.1
 					goWriteFile()
@@ -129,7 +130,7 @@ Func Start()
 					$rantime = ($rantime*60)
 					While ($rantime>=0)
 						Sleep(1000)
-						ToolTip("Congreat 200 Bath "& $rantime, 1,0 )
+						ToolTip("Congreat "&$profitNow&" Bath "& $rantime, 1,0 )
 						$rantime-=1
 					WEnd
 					$profitNow =0
@@ -215,20 +216,21 @@ Func goWriteFile($menu="BetMoney")
 		local $TotalProfit  = FileReadLine($filePatTotalProfit,2)  ;เปิดไฟล์ดึงค่า
 		if _NowDate() == $time and $totalProfit < 1000 then      ;ถ้าอยู่ในวันเดียวกัน
 			if($Money == "10.1") then
-			$TotalProfit += 20
+				$TotalProfit += 20
 			else
-			$TotalProfit += 10
+				$TotalProfit += 10
 			EndIf
-		ElseIf  _NowDate() == $time and $totalProfit >= 1000 Then
-			$Money = 10.1
-			goWriteFile()
-			Local $waittime = ((24 - @HOUR)*60*60)
-			While ($waittime>=0)
-				Sleep(1000)
-				ToolTip("Congreat Wait Next Day "& $waittime, 1,0 )
-				$waittime-=1
-			WEnd
-			_goToRoulette()
+			ElseIf  _NowDate() == $time and $totalProfit >= 1000 Then
+				_FileWriteLog(@ScriptDir & "\LogFile\LogData.log", "Congreat 1000 Bath This time")
+				$Money = 10.1
+				goWriteFile()
+				Local $waittime = ( (((24-@HOUR)*60) + (Random(60,180,1))) *60)  ; find time and + random  time 1-3 hr
+				While ($waittime>=0)
+					Sleep(1000)
+					ToolTip("Congreat Wait Next Day "& $waittime, 1,0 )
+					$waittime-=1
+				WEnd
+				_goToRoulette()
 		ElseIf  _NowDate() <> $time then
 			$time = _NowDate()
 			$TotalProfit = 0
@@ -264,9 +266,7 @@ EndFunc
 Func click_picture($p_name)  ; คลิกรูปภาพภายในพื้นที่ของ ของ app adpocket
 
 	Local $hTimer = TimerInit()  ;เริ่มจับเวลา
-
 	while 1
-
 		$Search = _ImageSearch(@ScriptDir &"\Images\"&$p_name&'.bmp',1,$X,$Y,2)
 		IF $Search = 1  Then
 			MouseClick("left",$X, $Y,1,2)
@@ -291,7 +291,6 @@ Func _Pause()
     $pssix = Not $pssix
     While $pssix
         Sleep(500)
-
         ToolTip('PAUSE', 19, 0)
     WEnd
     ToolTip("")
