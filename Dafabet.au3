@@ -210,13 +210,13 @@ Func goWriteFile($menu="BetMoney")
 		Local $filePatTotalProfit = @ScriptDir&"\LogFile\TotalProfit.txt"
 		local $time  = FileReadLine($filePatTotalProfit,1)  ;เปิดไฟล์ดึงค่า
 		local $TotalProfit  = FileReadLine($filePatTotalProfit,2)  ;เปิดไฟล์ดึงค่า
-		if _NowDate() == $time and $totalProfit < 1500 then      ;ถ้าอยู่ในวันเดียวกัน
+		if _NowDate() == $time and $totalProfit < 1000 then      ;ถ้าอยู่ในวันเดียวกัน
 			if($Money == "10.1") then
 			$TotalProfit += 20
 			else
 			$TotalProfit += 10
 			EndIf
-		ElseIf  _NowDate() == $time and $totalProfit >= 1500 Then
+		ElseIf  _NowDate() == $time and $totalProfit >= 1000 Then
 			$Money = 10.1
 			goWriteFile()
 			Local $waittime = ((24 - @HOUR)*60*60)
