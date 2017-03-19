@@ -20,6 +20,7 @@ Global  $Money = 0                  ;เงินวางเดิมพัน  - ค่าเริ่มต้น 0 บาท
 Global  $dropMoney
 Global  $timeRestart				;จับเวลารอ Restart
 Global  $profitNow = 0				;สร้างไว้ถ้ากำไร ครบ 200 บาทให้พัก
+Global  $profitPerRound =  0  ; profit 150 - 250 bath per round
 Global 	$filePath = @ScriptDir&"\LogFile\BetMoney.txt"
 While 1  ;หยุดรอการกด start
 	ToolTip('Start:[PGUP]_First Time:[INSERT]_Pause:[PAUSE]_EXIT:[PGDN] ', 19,0 )
@@ -43,8 +44,10 @@ func _fixB4Start()
 EndFunc
 
 func _goToRoulette()
-	sleep(1000)
 	$dropMoney = Random(1,3,1)	;เริ่มแรกให้random ที่วางเงิน
+	$profitPerRound =   Random(150,250,1)  ; profit 150 - 250 bath per round
+	;-----------------------------------------------------
+	sleep(1000)
 	ToolTip('Go to Roulette ', 50,0 )
 	WinActivate("[CLASS:MozillaWindowClass]","")   ;เปิดกน้าโปรแกรม Firefox ขึ้นมา
 	sleep(1000)
@@ -116,13 +119,13 @@ Func Start()
 					$profitNow += 10
 				EndIf
 
-				If $profitNow >= 200 then
+				If $profitNow >= $profitPerRound then
 
 					goWriteFile("TotalProfit")
 					$Money = 10.1
 					goWriteFile()
 
-					Local $rantime = Random(20,150,1)	;random หน่วงเวลา
+					Local $rantime = Random(60,180,1)	;random หน่วงเวลา
 					$rantime = ($rantime*60)
 					While ($rantime>=0)
 						Sleep(1000)
