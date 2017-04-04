@@ -8,8 +8,9 @@
 
 ;~ MsgBox($MB_OK, "Tutorial", "Hello World!")
 HotKeySet("{PGUP}","_Begin")
+HotKeySet("^{PGUP}","_fixB4Start")
 HotKeySet("{INSERT}","_goToRoulette")
-HotKeySet("^{INSERT}","_fixB4Start")
+HotKeySet("^{INSERT}","_fixB4goTo")
 HotKeySet("{PAUSE}", "_Pause")
 HotKeySet("{PGDN}", "_Exit")
 
@@ -20,10 +21,14 @@ Global  $Money = 0                  ;เงินวางเดิมพัน  - ค่าเริ่มต้น 0 บาท
 Global  $dropMoney
 Global  $timeRestart				;จับเวลารอ Restart
 Global  $profitNow = 0				;สร้างไว้ถ้ากำไร ครบ 200 บาทให้พัก
-Global  $profitPerRound =  0  ; profit 150 - 250 bath per round
+Global  $profitPerRound =  0  ; profit 10 - 30 bath per round
 Global 	$filePath = @ScriptDir&"\LogFile\BetMoney.txt"
 While 1  ;หยุดรอการกด start
-	ToolTip('Start:[PGUP]_First Time:[INSERT]_Pause:[PAUSE]_EXIT:[PGDN] ', 19,0 )
+	local $text =  'Start [PGUP]  Start&fill [Ctrl+PGUP]'&@LF
+		  $text &= 'Run First Time [INSERT] First&Fill [Ctrl+INSERT]'&@LF
+		  $text &= 'Pause [PAUSE]'&@LF
+		  $text &= 'EXIT [PGDN]'&@LF
+	ToolTip($text, 19,0 )
     Sleep(4*60*1000)  ;รอ 4 นาที ถ้ายังไม่กด Bot จะเริ่มทำงาน
 	Send("^{INSERT}")
 WEnd
@@ -36,16 +41,23 @@ Func _Begin()
 
 EndFunc
 
-func _fixB4Start()
+func _fixB4goTo()
 	ToolTip('Fix Money = 10.1 ', 50,0 )
 	$Money = 10.1
 	goWriteFile()
 	_goToRoulette()
 EndFunc
 
+Func _fixB4Start()
+	ToolTip('Fix Money = 10.1 ', 50,0 )
+	$Money = 10.1
+	goWriteFile()
+	Start()
+EndFunc
+
 func _goToRoulette()
 	$dropMoney = Random(1,3,1)	;เริ่มแรกให้random ที่วางเงิน
-	$profitPerRound =   Random(150,250,1)  ; profit 150 - 250 bath per round
+	$profitPerRound =   Random(10,30,1)  ; profit 10 - 30 bath per round
 	;-----------------------------------------------------
 	sleep(1000)
 	ToolTip('Go to Roulette ', 50,0 )
@@ -126,7 +138,7 @@ Func Start()
 					$Money = 10.1
 					goWriteFile()
 
-					Local $rantime = Random(60,180,1)	;random หน่วงเวลา
+					Local $rantime = Random(60,150,1)	;random หน่วงเวลา หลังจากได้กำไรครบในรอบนั้น
 					$rantime = ($rantime*60)
 					While ($rantime>=0)
 						Sleep(1000)
@@ -214,17 +226,17 @@ Func goWriteFile($menu="BetMoney")
 		Local $filePatTotalProfit = @ScriptDir&"\LogFile\TotalProfit.txt"
 		local $time  = FileReadLine($filePatTotalProfit,1)  ;เปิดไฟล์ดึงค่า
 		local $TotalProfit  = FileReadLine($filePatTotalProfit,2)  ;เปิดไฟล์ดึงค่า
-		if _NowDate() == $time and $totalProfit < 1000 then      ;ถ้าอยู่ในวันเดียวกัน
+		if _NowDate() == $time and $totalProfit < 200 then      ;ถ้าอยู่ในวันเดียวกัน
 			if($Money == "10.1") then
 				$TotalProfit += 20
 			else
 				$TotalProfit += 10
 			EndIf
-			ElseIf  _NowDate() == $time and $totalProfit >= 1000 Then
-				_FileWriteLog(@ScriptDir & "\LogFile\LogData.log", "Congreat 1000 Bath This time")
+			ElseIf  _NowDate() == $time and $totalProfit >= 200 Then
+				_FileWriteLog(@ScriptDir & "\LogFile\LogData.log", "Congreat 200 Bath This time")
 				$Money = 10.1
 				goWriteFile()
-				Local $waittime = ( (((24-@HOUR)*60) + (Random(60,180,1))) *60)  ; find time and + random  time 1-3 hr
+				Local $waittime = ( (((24-@HOUR)*60) + (Random(60,120,1))) *60)  ; find time and + random  time 1-2 hr
 				While ($waittime>=0)
 					Sleep(1000)
 					ToolTip("Congreat Wait Next Day "& $waittime, 1,0 )
