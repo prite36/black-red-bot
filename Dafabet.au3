@@ -57,7 +57,7 @@ EndFunc
 
 func _goToRoulette()
 	$dropMoney = Random(1,3,1)	;‡√‘Ë¡·√°„ÀÈrandom ∑’Ë«“ß‡ß‘π
-	$profitPerRound =   Random(10,30,1)  ; profit 10 - 30 bath per round
+	$profitPerRound =   Random(10,20,1)  ; profit 10 - 20 bath per round
 	;-----------------------------------------------------
 	sleep(1000)
 	ToolTip('Go to Roulette ', 50,0 )
