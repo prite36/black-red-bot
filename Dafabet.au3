@@ -18,7 +18,7 @@ $X =0
 $Y =0
 Global 	$CheckNet = true  			;เอาไว้เช็คสถานะเน็ต
 Global  $Money = 0                  ;เงินวางเดิมพัน  - ค่าเริ่มต้น 0 บาท
-Global  $dropMoney
+Global  $dropMoney =2
 Global  $timeRestart				;จับเวลารอ Restart
 Global  $profitNow = 0				;สร้างไว้ถ้ากำไร ครบ 200 บาทให้พัก
 Global  $profitPerRound =  0  ; profit 10 - 30 bath per round
@@ -91,7 +91,7 @@ Func Start()
 				click_picture("fillMoney")
 				Sleep(300)
 				local $moneyOnFile  = FileReadLine($filePath,1)  ;เปิดไฟล์ดึงค่า
-				send($moneyOnFile) ;ใส่เงินในช่อง
+				send(Floor($moneyOnFile)) ;ใส่เงินในช่อง
 				$Money = $moneyOnFile  ;แทนค่าในตัวแปร เพื่อเอาไปเช็ค
 				FileClose($filePath) ;ปิด File
 				Sleep(1000)
@@ -184,8 +184,6 @@ Func Start()
 						ElseIf $Money == 875 then
 							$Money = 1312
 						ElseIf $Money == 1312 then
-							$Money = 1968
-						ElseIf $Money == 1968 then
 							Exit 0
 						EndIf
 				EndIf
